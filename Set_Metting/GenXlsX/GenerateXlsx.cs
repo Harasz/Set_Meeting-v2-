@@ -7,11 +7,13 @@ namespace Set_Metting.GenXlsX
     {
         private XLWorkbook workbook;
         private IXLWorksheet worksheet;
-        public GenerateXlsx(string[][] data)
+        private int membersCount = 1;
+        public GenerateXlsx(string[][] data, int memberCount)
         {
             Notifications.Notif.Info("Generowanie pliku z wynikami");
             workbook = new XLWorkbook();
             worksheet = workbook.Worksheets.Add("Liga szachowa");
+            this.membersCount = memberCount;
             CreateHeader();
             GenerateClash(data);
         }
@@ -62,15 +64,26 @@ namespace Set_Metting.GenXlsX
 
         private void GenerateClash(string[][] data)
         {
+            int lineCount = 6, que = 1;
+
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i][0] == "PAUZA" || data[i][1] == "PAUZA") continue;
+                if (i % (this.membersCount / 2) == 0)
+                {
+                    this.worksheet.Cell("A" + lineCount).Value = "Kolejka: " + que;
+                    this.worksheet.Cell("A" + lineCount).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    this.worksheet.Cell("A" + lineCount).Style.Fill.BackgroundColor = XLColor.FromName("yellow");
+                    lineCount++;
+                    que++;
+                }
 
-                this.worksheet.Cell("A" + (i + 6)).Value = data[i][0];
-                this.worksheet.Cell("A" + (i + 6)).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                this.worksheet.Cell("A" + lineCount).Value = data[i][0];
+                this.worksheet.Cell("A" + lineCount).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
-                this.worksheet.Cell("B" + (i + 6)).Value = data[i][1];
-                this.worksheet.Cell("B" + (i + 6)).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                this.worksheet.Cell("B" + lineCount).Value = data[i][1];
+                this.worksheet.Cell("B" + lineCount).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                lineCount++;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace Set_Metting
             try
             {
                 new GenDoc.GenerateDoc(rf.ListMembers, rf.MembersCount);
-                new GenXlsX.GenerateXlsx(rf.ListMembers);
+                new GenXlsX.GenerateXlsx(rf.ListMembers, rf.MembersCount);
             }
             catch (Exception e)
             {
